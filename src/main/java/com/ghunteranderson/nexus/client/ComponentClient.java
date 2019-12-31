@@ -32,13 +32,15 @@ public class ComponentClient {
 		return new PaginationIterator<>(source).stream();
 	}
 	
-	public Optional<Component> find(String id){
+	public Optional<Component> findOne(String id){
 		try {
 			return Optional.of(client.path(id).request().get(Component.class));
 		} catch(NotFoundException ex) {
 			return Optional.empty();
 		}
 	}
+	
+	
 	
 	public void delete(String id) {
 		client.path(id).request().delete();
