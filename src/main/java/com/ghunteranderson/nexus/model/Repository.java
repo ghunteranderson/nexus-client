@@ -10,5 +10,6 @@ public class Repository {
 	private String format;
 	private String type;
 	private String url;
+	@SuppressWarnings("rawtypes")
 	private Map<String, Map> attributes;
 }

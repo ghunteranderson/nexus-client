@@ -5,7 +5,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
