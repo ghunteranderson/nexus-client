@@ -3,13 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.ghunteranderson</groupId>
-	<artifactId>nexus-client</artifactId>
-	<version>0.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<groupId>com.ghunteranderson.nexus</groupId>
+	<artifactId>nexus-tools-parent</artifactId>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
 
-	<name>Nexus Client</name>
-	<description>A Java REST client for Nexus repository.</description>
+	<modules>
+		<module>nexus-client</module>
+	</modules>
+
+	<name>Nexus Tools Parent</name>
+	<description>Parent pom for a collection of Nexus tools</description>
 	<url>https://ghunteranderson.com</url>
 
 	<licenses>
@@ -27,9 +31,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/ghunteranderson/jsemver.git</connection>
-		<developerConnection>scm:git:ssh://github.com:ghunteranderson/jsemver.git</developerConnection>
-		<url>https://github.com/ghunteranderson/jsemver/tree/master</url>
+		<connection>scm:git:git://github.com/ghunteranderson/nexus-tools.git</connection>
+		<developerConnection>scm:git:ssh://github.com:ghunteranderson/nexus-tools.git</developerConnection>
+		<url>https://github.com/ghunteranderson/nexus-tools/tree/master</url>
 	</scm>
 
 	<properties>
@@ -37,6 +41,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+		<revision>0.0.0-SNAPSHOT</revision>
 	</properties>
 
 	<build>
@@ -92,62 +97,40 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.eluder.coveralls</groupId>
-				<artifactId>coveralls-maven-plugin</artifactId>
-				<version>4.3.0</version>
-				<configuration>
-					<repoToken>${env.COVERALLS_TOKEN}</repoToken>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.7</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>nexus-central</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			   <groupId>org.codehaus.mojo</groupId>
+			   <artifactId>flatten-maven-plugin</artifactId>
+			   <version>1.1.0</version>
+			   <executions>
+				 <execution>
+				   <id>flatten</id>
+				   <phase>process-resources</phase>
+				   <goals>
+					 <goal>flatten</goal>
+				   </goals>
+				 </execution>
+				 <execution>
+				   <id>flatten.clean</id>
+				   <phase>clean</phase>
+				   <goals>
+					 <goal>clean</goal>
+				   </goals>
+				 </execution>
+			   </executions>
+			 </plugin>
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.ghunteranderson</groupId>
+				<artifactId>jsemver</artifactId>
+				<version>0.0.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
-		<dependency>
-			<groupId>com.ghunteranderson</groupId>
-			<artifactId>jsemver</artifactId>
-			<version>0.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>2.29.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-			<version>2.29.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.29.1</version>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -172,4 +155,53 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>CI</id>
+			<activation>
+				<property>
+					<name>env.CI</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eluder.coveralls</groupId>
+						<artifactId>coveralls-maven-plugin</artifactId>
+						<version>4.3.0</version>
+						<configuration>
+							<repoToken>${env.COVERALLS_TOKEN}</repoToken>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.7</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>nexus-central</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
