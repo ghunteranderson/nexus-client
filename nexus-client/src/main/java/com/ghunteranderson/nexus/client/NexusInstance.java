@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE)
 public class NexusInstance {
+	
+	public static Builder builder(String url) {
+		return new Builder(url);
+	}
 
 	private final WebTarget client;
 	

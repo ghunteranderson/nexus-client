@@ -10,6 +10,7 @@
 
 	<modules>
 		<module>nexus-client</module>
+		<module>maven-plugin</module>
 	</modules>
 
 	<name>Nexus Tools Parent</name>
