@@ -11,6 +11,7 @@
 	<modules>
 		<module>rest-client</module>
 		<module>nexus-maven-plugin</module>
+		<module>nexus-core</module>
 	</modules>
 
 	<name>Nexus Tools Parent</name>
