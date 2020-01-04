@@ -21,6 +21,11 @@
 			<groupId>com.ghunteranderson</groupId>
 			<artifactId>jsemver</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.ghunteranderson.nexus</groupId>
+			<artifactId>rest-client</artifactId>
+			<version>${revision}</version>
+		</dependency>
 	</dependencies>
 
 </project>

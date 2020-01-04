@@ -10,6 +10,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.ghunteranderson.nexus.model.Asset;
 import com.ghunteranderson.nexus.model.ComponentQuery;
@@ -75,15 +76,10 @@ public class AssetClient {
 		assetTarget.path(id).request().delete();
 	}
 	
-	public InputStream download(String id) {
-		Asset asset = findOne(id).orElseThrow(() -> new NotFoundException("Could not find asset with id " + id));
-		return download(asset);
-	}
-	
-	public InputStream download(Asset asset) {
+	public InputStream download(String repository, String path) {
 		return downloadTarget
-				.path(asset.getRepository())
-				.path(asset.getPath())
+				.path(repository)
+				.path(path)
 				.request()
 				.accept(MediaType.APPLICATION_OCTET_STREAM)
 				.get(InputStream.class);
