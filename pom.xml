@@ -9,8 +9,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>nexus-client</module>
-		<module>maven-plugin</module>
+		<module>rest-client</module>
+		<module>nexus-maven-plugin</module>
 	</modules>
 
 	<name>Nexus Tools Parent</name>
