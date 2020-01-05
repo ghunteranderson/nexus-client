@@ -6,8 +6,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 
 import com.ghunteranderson.nexus.maven.inject.DependencyFactory;
@@ -38,6 +36,6 @@ public abstract class AbstractNexusMojo extends AbstractMojo{
 		run();
 	}
 	
-	protected abstract void run();
+	protected abstract void run() throws MojoExecutionException;
 	
 }

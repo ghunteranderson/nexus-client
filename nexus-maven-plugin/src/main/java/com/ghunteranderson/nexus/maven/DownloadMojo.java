@@ -1,12 +1,15 @@
 package com.ghunteranderson.nexus.maven;
 
+import java.io.IOException;
 import java.util.Optional;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import com.ghunteranderson.jsemver.VersionRange;
 import com.ghunteranderson.nexus.maven.inject.Dependency;
+import com.ghunteranderson.nexus.model.Asset;
 import com.ghunteranderson.nexus.model.Component;
 import com.ghunteranderson.nexus.service.DownloadService;
 import com.ghunteranderson.nexus.service.SearchService;
@@ -33,12 +36,25 @@ public class DownloadMojo extends AbstractNexusMojo {
 	@Dependency private SearchService searchService;
 	
 	@Override
-	protected void run() {
-		Optional<Component> component = searchService.findLatest(groupId, artifactId, VersionRange.from(version));
-		if(component.isPresent())
-			getLog().info("Found component: " + component);
-		else
-			getLog().error(String.format("Could not find component %s:%s matching version \"%s\"", groupId, artifactId, version));
+	protected void run() throws MojoExecutionException {
+		Optional<Component> optional = searchService.findLatest(groupId, artifactId, VersionRange.from(version));
+		if(!optional.isPresent()) {
+			String error = String.format("Could not find component %s:%s matching version \"%s\"", groupId, artifactId, version);
+			getLog().error(error);
+			getLog().error("Artifact may not exist or authentication may be required.");
+			throw new MojoExecutionException(error);
+		}
+		
+		Component component = optional.get();
+		getLog().info("Found component: " + FormatUtils.gavCoordinates(component));
+		try {
+			for(Asset asset : component.getAssets()) {
+				getLog().info("Downloading " + FormatUtils.fileName(asset));
+				downloadService.downloadComponent(component);
+			}
+		} catch(IOException ex) {
+			throw new MojoExecutionException("IOException while downloading artifact.", ex);
+		}
 	}	
 
 

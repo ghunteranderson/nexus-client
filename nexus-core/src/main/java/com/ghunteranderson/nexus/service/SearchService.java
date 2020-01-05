@@ -28,7 +28,7 @@ public class SearchService {
 	public Optional<Component> findLatest(String group, String name, VersionRange versionRange){
 		VersionComparator comparator = new VersionComparator();
 		ComponentQuery query = ComponentQuery.mavenQuery()
-				.group(name)
+				.group(group)
 				.name(name);
 		
 		return client.findAll(query)
