@@ -1,8 +1,10 @@
 package com.ghunteranderson.nexus.maven;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -32,6 +34,9 @@ public class DownloadMojo extends AbstractNexusMojo {
 	@Parameter(defaultValue="${version}")
 	private String version;
 	
+	@Parameter(defaultValue="${dir}")
+	private String dir;
+	
 	@Dependency private DownloadService downloadService;
 	@Dependency private SearchService searchService;
 	
@@ -47,13 +52,16 @@ public class DownloadMojo extends AbstractNexusMojo {
 		
 		Component component = optional.get();
 		getLog().info("Found component: " + FormatUtils.gavCoordinates(component));
+		
+		String directory = StringUtils.isBlank(dir) ? "." : dir;
 		try {
 			for(Asset asset : component.getAssets()) {
-				getLog().info("Downloading " + FormatUtils.fileName(asset));
-				downloadService.downloadComponent(component);
+				getLog().info("Downloading " + Paths.get(directory, FormatUtils.fileName(asset)).toString());
+				downloadService.downloadComponent(component, directory);
 			}
 		} catch(IOException ex) {
-			throw new MojoExecutionException("IOException while downloading artifact.", ex);
+			throw new MojoExecutionException("IOException while downloading artifact: " 
+					+ ex.getClass().getSimpleName() + ": " + ex.getMessage(), ex);
 		}
 	}	
 
