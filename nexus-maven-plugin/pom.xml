@@ -15,6 +15,19 @@
 		<version>${revision}</version>
 	</parent>
 
+	<developers>
+		<developer>
+			<name>G. Hunter Anderson</name>
+			<email>ghunteranerson@gmail.com</email>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/ghunteranderson/nexus-tools.git</connection>
+		<developerConnection>scm:git:ssh://github.com:ghunteranderson/nexus-tools.git</developerConnection>
+		<url>https://github.com/ghunteranderson/nexus-tools/tree/master</url>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.ghunteranderson</groupId>
