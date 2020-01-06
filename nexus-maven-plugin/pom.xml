@@ -46,6 +46,12 @@
 			<artifactId>nexus-core</artifactId>
 			<version>${revision}</version>
 		</dependency>
+		<!-- Adding for Java 11 compatibility -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
