@@ -10,7 +10,6 @@ install:
   - gpg --import signing-key.gpg
   - rm signing-key.gpg
   - cp .travis.settings.xml ${HOME}/.m2/settings.xml
-  - mvn -B dependency:resolve
   - mvn -B dependency:resolve-plugins
 
 before_script:

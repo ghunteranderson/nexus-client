@@ -9,7 +9,9 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>nexus-client</module>
+		<module>rest-client</module>
+		<module>nexus-maven-plugin</module>
+		<module>nexus-core</module>
 	</modules>
 
 	<name>Nexus Tools Parent</name>
@@ -97,26 +99,26 @@
 				</executions>
 			</plugin>
 			<plugin>
-			   <groupId>org.codehaus.mojo</groupId>
-			   <artifactId>flatten-maven-plugin</artifactId>
-			   <version>1.1.0</version>
-			   <executions>
-				 <execution>
-				   <id>flatten</id>
-				   <phase>process-resources</phase>
-				   <goals>
-					 <goal>flatten</goal>
-				   </goals>
-				 </execution>
-				 <execution>
-				   <id>flatten.clean</id>
-				   <phase>clean</phase>
-				   <goals>
-					 <goal>clean</goal>
-				   </goals>
-				 </execution>
-			   </executions>
-			 </plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<executions>
+					<execution>
+						<id>flatten</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>flatten</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>flatten.clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -125,7 +127,7 @@
 			<dependency>
 				<groupId>com.ghunteranderson</groupId>
 				<artifactId>jsemver</artifactId>
-				<version>0.0.0</version>
+				<version>0.1.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -141,6 +143,12 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>5.5.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
