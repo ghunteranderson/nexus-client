@@ -1,0 +1,9 @@
+<settings>
+	<servers>
+		<server>
+			<id>nexus-central</id>
+			<username>${env.MAVEN_DEPLOY_USERNAME}</username>
+			<password>${env.MAVEN_DEPLOY_TOKEN}</password>
+		</server>
+	</servers>
+</settings>
