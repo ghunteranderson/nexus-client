@@ -8,22 +8,18 @@ import com.ghunteranderson.jsemver.VersionComparator;
 import com.ghunteranderson.jsemver.VersionRange;
 import com.ghunteranderson.jsemver.VersionSyntaxException;
 import com.ghunteranderson.nexus.client.ComponentClient;
-import com.ghunteranderson.nexus.client.NexusInstance;
 import com.ghunteranderson.nexus.model.Component;
 import com.ghunteranderson.nexus.model.ComponentQuery;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class SearchService {
 	
 	private static final Logger logger = Logger.getLogger(SearchService.class.getName());
 
-	private ComponentClient client;
-	
-	public SearchService(NexusInstance instance) {
-		client = new ComponentClient(instance);
-	}
+	private final ComponentClient client;
 	
 	public Optional<Component> findLatest(String group, String name, VersionRange versionRange){
 		VersionComparator comparator = new VersionComparator();

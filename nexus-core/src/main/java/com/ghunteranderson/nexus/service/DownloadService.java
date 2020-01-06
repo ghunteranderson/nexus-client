@@ -9,18 +9,15 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import com.ghunteranderson.nexus.client.AssetClient;
-import com.ghunteranderson.nexus.client.NexusInstance;
 import com.ghunteranderson.nexus.model.Asset;
 import com.ghunteranderson.nexus.model.Component;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class DownloadService {
 	
-	
 	private final AssetClient client;
-	
-	public DownloadService(NexusInstance instance) {
-		client = new AssetClient(instance);
-	}
 	
 	public void downloadAsset(Asset asset, String directory) throws IOException {
 		InputStream in = client.download(asset.getRepository(), asset.getPath());

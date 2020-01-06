@@ -8,6 +8,8 @@ import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecryptionResult;
 
+import com.ghunteranderson.nexus.client.AssetClient;
+import com.ghunteranderson.nexus.client.ComponentClient;
 import com.ghunteranderson.nexus.client.NexusInstance;
 import com.ghunteranderson.nexus.maven.inject.DependencyFactory;
 import com.ghunteranderson.nexus.maven.inject.InjectionBinder;
@@ -20,7 +22,9 @@ public class ServiceConfiguration {
 	public void applyTo(InjectionBinder factory) {
 		factory.bind(NexusInstance.class, this::nexusInstance);
 		factory.bind(DownloadService.class, this::downloadService);
-		factory.bind(SearchService.class, this::searchService);	
+		factory.bind(SearchService.class, this::searchService);
+		factory.bind(AssetClient.class, this::assetClient);
+		factory.bind(ComponentClient.class, this::componentClient);
 	}
 	
 	
@@ -45,14 +49,24 @@ public class ServiceConfiguration {
 		return builder.build();
 	}
 	
-	private DownloadService downloadService(MojoContext context, DependencyFactory factory) {
+	private AssetClient assetClient(MojoContext context, DependencyFactory factory) {
 		NexusInstance nexus = factory.getInstance(NexusInstance.class, context);
-		return new DownloadService(nexus);
+		return new AssetClient(nexus);
+	}
+	
+	private ComponentClient componentClient(MojoContext context, DependencyFactory factory) {
+		NexusInstance nexus = factory.getInstance(NexusInstance.class, context);
+		return new ComponentClient(nexus);
+	}
+	
+	private DownloadService downloadService(MojoContext context, DependencyFactory factory) {
+		AssetClient client = factory.getInstance(AssetClient.class, context);
+		return new DownloadService(client);
 	}
 	
 	private SearchService searchService(MojoContext context, DependencyFactory factory) {
-		NexusInstance nexus = factory.getInstance(NexusInstance.class, context);
-		return new SearchService(nexus);
+		ComponentClient client = factory.getInstance(ComponentClient.class, context);
+		return new SearchService(client);
 	}
 
 }
